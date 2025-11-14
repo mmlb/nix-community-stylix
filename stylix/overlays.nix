@@ -6,7 +6,13 @@
   ...
 }:
 {
-  options.stylix.overlays.enable = config.lib.stylix.mkEnableTarget "packages via overlays" true;
+  options.stylix.overlays.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = config.stylix.autoEnable;
+    defaultText = lib.literalExpression "config.stylix.autoEnable";
+    description = "Whether to enable theming for packages via overlays.";
+    example = false;
+  };
 
   imports = map (
     f:

@@ -8,7 +8,13 @@ let
 in
 {
   options.stylix.targets.qt = {
-    enable = config.lib.stylix.mkEnableTarget "QT" true;
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = config.stylix.autoEnable;
+      defaultText = lib.literalExpression "config.stylix.autoEnable";
+      description = "Whether to enable theming for QT.";
+      example = false;
+    };
     platform = lib.mkOption {
       description = ''
         Selects the platform theme to use for Qt applications.

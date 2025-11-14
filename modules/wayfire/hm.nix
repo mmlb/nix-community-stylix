@@ -9,7 +9,13 @@ mkTarget {
   name = "wayfire";
   humanName = "Wayfire";
 
-  extraOptions.useWallpaper = config.lib.stylix.mkEnableWallpaper "wayfire" true;
+  extraOptions.useWallpaper = lib.mkOption {
+    type = lib.types.bool;
+    default = config.stylix.image != null;
+    defaultText = lib.literalExpression "config.stylix.image != null";
+    description = "Whether to set the wallpaper for Wayfire.";
+    example = false;
+  };
 
   configElements = [
     (

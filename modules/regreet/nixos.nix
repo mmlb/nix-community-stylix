@@ -13,7 +13,13 @@ mkTarget {
   autoEnableExpr = "pkgs.stdenv.hostPlatform.isLinux";
 
   extraOptions = {
-    useWallpaper = config.lib.stylix.mkEnableWallpaper "ReGreet" true;
+    useWallpaper = lib.mkOption {
+      type = lib.types.bool;
+      default = config.stylix.image != null;
+      defaultText = lib.literalExpression "config.stylix.image != null";
+      description = "Whether to set the wallpaper for ReGreet.";
+      example = false;
+    };
     extraCss = lib.mkOption {
       description = ''
         Extra code added to `programs.regreet.extraCss` option.
@@ -65,8 +71,7 @@ mkTarget {
     (
       { polarity }:
       {
-        programs.regreet.settings.GTK.application_prefer_dark_theme =
-          polarity == "dark";
+        programs.regreet.settings.GTK.application_prefer_dark_theme = polarity == "dark";
       }
     )
     (

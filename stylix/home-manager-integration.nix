@@ -186,7 +186,7 @@ in
         default settings.
 
         This only applies to Home Manager configurations managed by
-        [`stylix.homeManagerIntegration.autoImport`](#stylixhomemanagerintegrationautoimport).
+        `stylix.homeManagerIntegration.autoImport`.
       '';
       type = lib.types.bool;
       default = true;

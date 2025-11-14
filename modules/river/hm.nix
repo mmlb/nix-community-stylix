@@ -1,7 +1,12 @@
 { config, lib, ... }:
 {
-  options.stylix.targets.river.enable =
-    config.lib.stylix.mkEnableTarget "River" true;
+  options.stylix.targets.river.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = config.stylix.autoEnable;
+    defaultText = lib.literalExpression "config.stylix.autoEnable";
+    description = "Whether to enable theming for River.";
+    example = false;
+  };
 
   config = lib.mkIf (config.stylix.enable && config.stylix.targets.river.enable) {
     wayland.windowManager.river.settings =

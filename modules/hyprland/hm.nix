@@ -10,10 +10,12 @@ mkTarget {
   extraOptions =
     { image }:
     {
-      hyprpaper.enable = config.lib.stylix.mkEnableTargetWith {
-        name = "Hyprpaper";
-        autoEnable = image != null;
-        autoEnableExpr = "config.stylix.image != null";
+      hyprpaper.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = image != null;
+        defaultText = lib.literalExpression "config.stylix.image != null";
+        description = "Whether to enable theming for Hyprpaper.";
+        example = true;
       };
     };
 

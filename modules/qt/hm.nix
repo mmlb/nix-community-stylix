@@ -12,10 +12,12 @@
     # = kvantum makes host systemd unusable") is resolved.
     #
     # [1]: https://github.com/nix-community/home-manager/issues/6565
-    enable = config.lib.stylix.mkEnableTargetWith {
-      name = "QT";
-      autoEnable = nixosConfig != null;
-      autoEnableExpr = "nixosConfig != null";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = (config.stylix.autoEnable) && (nixosConfig != null);
+      defaultText = lib.literalExpression "config.stylix.autoEnable && (nixosConfig != null)";
+      description = "Whether to enable theming for QT.";
+      example = true;
     };
 
     platform = lib.mkOption {

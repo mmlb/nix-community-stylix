@@ -7,7 +7,7 @@
 let
   cfg = config.stylix.targets.grub;
   inherit (config.stylix) imageScalingMode fonts;
-  inherit (config.lib.stylix) mkEnableTarget mkEnableWallpaper pixel;
+  inherit (config.lib.stylix) pixel;
   # Grub requires fonts to be converted to "PFF2 format"
   # This function takes a font { name, package } and produces a .pf2 file
   mkGrubFont =
@@ -58,8 +58,19 @@ in
     })
   ];
   options.stylix.targets.grub = {
-    enable = mkEnableTarget "GRUB" true;
-    useWallpaper = mkEnableWallpaper "GRUB" false;
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = config.stylix.autoEnable;
+      defaultText = lib.literalExpression "config.stylix.autoEnable";
+      description = "Whether to enable theming for GRUB.";
+      example = false;
+    };
+    useWallpaper = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to set the wallpaper for GRUB.";
+      example = true;
+    };
   };
 
   config.boot.loader.grub =

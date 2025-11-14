@@ -19,14 +19,19 @@ mkTarget {
   #
   # [1]: https://github.com/nix-community/home-manager/blob/5cfbf5cc37a3bd1da07ae84eea1b828909c4456b/modules/programs/swaylock.nix#L12-L17
   autoEnable =
-    lib.versionAtLeast config.home.stateVersion "23.05"
-    && pkgs.stdenv.hostPlatform.isLinux;
+    lib.versionAtLeast config.home.stateVersion "23.05" && pkgs.stdenv.hostPlatform.isLinux;
 
   autoEnableExpr = ''
     lib.versionAtLeast config.home.stateVersion "23.05" && pkgs.stdenv.hostPlatform.isLinux
   '';
 
-  extraOptions.useWallpaper = config.lib.stylix.mkEnableWallpaper "Swaylock" true;
+  extraOptions.useWallpaper = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    defaultText = lib.literalExpression "true";
+    description = "Whether to set the wallpaper for Swaylock.";
+    example = false;
+  };
 
   configElements = [
     (
@@ -71,7 +76,7 @@ mkTarget {
     (
       { cfg, image }:
       {
-        programs.swaylock.settings.image = lib.mkIf cfg.useWallpaper image;
+        programs.swaylock.settings.image = lib.mkIf (image != null && cfg.useWallpaper) image;
       }
     )
     (

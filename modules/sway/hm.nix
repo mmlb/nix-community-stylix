@@ -9,8 +9,20 @@ let
 in
 {
   options.stylix.targets.sway = {
-    enable = config.lib.stylix.mkEnableTarget "Sway" true;
-    useWallpaper = config.lib.stylix.mkEnableWallpaper "Sway" true;
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = config.stylix.autoEnable;
+      defaultText = lib.literalExpression "config.stylix.autoEnable";
+      description = "Whether to enable theming for Sway.";
+      example = false;
+    };
+    useWallpaper = lib.mkOption {
+      type = lib.types.bool;
+      default = config.stylix.image != null;
+      defaultText = lib.literalExpression "config.stylix.image != null";
+      description = "Whether to set the wallpaper for Sway.";
+      example = false;
+    };
     exportedBarConfig = lib.mkOption {
       type = lib.types.attrs;
       description = ''
