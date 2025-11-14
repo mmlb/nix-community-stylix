@@ -63,7 +63,7 @@ since it allows us to easily change the username or add additional users in the
 future.
 
 Once the module is complete, use `git add` to track the file, then the new
-packages will be [available to use](#usage).
+packages will be [available to use](./testbeds.md#usage).
 
 ## Usage
 

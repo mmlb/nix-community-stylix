@@ -12,7 +12,13 @@ mkTarget {
   autoEnable = pkgs.stdenv.hostPlatform.isLinux;
   autoEnableExpr = "pkgs.stdenv.hostPlatform.isLinux";
 
-  extraOptions.useWallpaper = config.lib.stylix.mkEnableWallpaper "ReGreet" true;
+  extraOptions.useWallpaper = lib.mkOption {
+    type = lib.types.bool;
+    default = config.stylix.image != null;
+    defaultText = lib.literalExpression "config.stylix.image != null";
+    description = "Whether to set the wallpaper for ReGreet.";
+    example = false;
+  };
 
   configElements = [
     {

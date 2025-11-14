@@ -15,8 +15,13 @@ let
 
 in
 {
-  options.stylix.targets.gnome.enable =
-    config.lib.stylix.mkEnableTarget "GNOME and GDM" true;
+  options.stylix.targets.gnome.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = config.stylix.autoEnable;
+    defaultText = lib.literalExpression "config.stylix.autoEnable";
+    description = "Whether to enable theming for GNOME and GDM.";
+    example = false;
+  };
 
   config =
     lib.mkIf

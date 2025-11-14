@@ -9,7 +9,13 @@ mkTarget {
   humanName = "LightDM";
 
   extraOptions = {
-    useWallpaper = config.lib.stylix.mkEnableWallpaper "LightDM" true;
+    useWallpaper = lib.mkOption {
+      type = lib.types.bool;
+      default = config.stylix.image != null;
+      defaultText = lib.literalExpression "config.stylix.image != null";
+      description = "Whether to set the wallpaper for LightDM.";
+      example = false;
+    };
   };
 
   configElements =

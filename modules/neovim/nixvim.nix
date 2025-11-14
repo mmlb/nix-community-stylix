@@ -36,7 +36,7 @@ mkTarget {
       type = lib.types.deferredModule;
       description = ''
         Theming configuration which can be merged with your own. See
-        [Standalone Mode](#standalone-mode) documentation.
+        Standalone Mode documentation.
       '';
       readOnly = true;
     };

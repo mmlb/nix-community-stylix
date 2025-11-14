@@ -220,8 +220,7 @@ available under `meta`:
   The attribute names are used as hyperlink text and the attribute values are
   used as URLs.
 
-- `maintainers`: required list of maintainers. See [Maintainers](#maintainers)
-  section.
+- `maintainers`: required list of maintainers. See [Maintainers](./modules.md#maintainers) section.
 
 - `description`: optional markdown string for extra documentation.
 

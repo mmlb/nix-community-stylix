@@ -173,9 +173,9 @@
 {
   name,
   humanName,
-  autoEnable ? null,
+  autoEnable ? true,
   autoEnableExpr ? null,
-  autoWrapEnableExpr ? null,
+  autoWrapEnableExpr ? true,
   enableExample ? null,
   extraOptions ? { },
   configElements ? [ ],
@@ -240,17 +240,50 @@ let
 
       options.stylix.targets.${name}.enable =
         let
-          enableArgs = {
-            name = humanName;
-          }
-          // lib.optionalAttrs (args ? autoEnable) { inherit autoEnable; }
-          // lib.optionalAttrs (args ? autoEnableExpr) { inherit autoEnableExpr; }
-          // lib.optionalAttrs (args ? autoWrapEnableExpr) {
-            autoWrapExpr = autoWrapEnableExpr;
-          }
-          // lib.optionalAttrs (args ? enableExample) { example = enableExample; };
+          cfg = config.stylix;
+          actualAutoEnable = autoEnable;
+          shouldAutoWrap = autoWrapEnableExpr;
+
+          wrapExpr =
+            expr:
+            let
+              trimmed = lib.trim expr;
+              isWrapped = builtins.match ''[(].*[)]'' trimmed != null;
+              hasNewlines = lib.hasInfix "\n" trimmed;
+              needsWrapping = builtins.any (op: lib.hasInfix op trimmed) [
+                "||"
+                "->"
+                "|>"
+                "<|"
+                "with "
+                "assert "
+              ];
+              indented = lib.pipe trimmed [
+                (lib.strings.splitString "\n")
+                (map (line: if line == "" then "" else "  " + line))
+                (builtins.concatStringsSep "\n")
+              ];
+              wrapped = if hasNewlines then "(\n${indented}\n)" else "(${trimmed})";
+            in
+            if shouldAutoWrap && !isWrapped && needsWrapping then wrapped else trimmed;
         in
-        config.lib.stylix.mkEnableTargetWith enableArgs;
+        lib.mkOption {
+          type = lib.types.bool;
+          default = cfg.autoEnable && actualAutoEnable;
+          defaultText =
+            if args ? autoEnableExpr then
+              lib.literalExpression "config.stylix.autoEnable && ${wrapExpr autoEnableExpr}"
+            else if actualAutoEnable then
+              lib.literalExpression "config.stylix.autoEnable"
+            else
+              false;
+          description = "Whether to enable theming for ${humanName}.";
+          example =
+            if args ? enableExample then
+              enableExample
+            else
+              (if args ? autoEnableExpr then true else !actualAutoEnable);
+        };
 
       config = lib.mkIf (config.stylix.enable && cfg.enable) (
         lib.mkMerge (

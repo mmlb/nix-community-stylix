@@ -5,8 +5,13 @@
   ...
 }:
 {
-  options.stylix.targets.nixos-icons.enable =
-    config.lib.stylix.mkEnableTarget "the NixOS logo" true;
+  options.stylix.targets.nixos-icons.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = config.stylix.autoEnable;
+    defaultText = lib.literalExpression "config.stylix.autoEnable";
+    description = "Whether to enable theming for the NixOS logo.";
+    example = false;
+  };
 
   overlay =
     _: super:
